@@ -1,0 +1,38 @@
+{
+  "name": "robot-parser",
+  "version": "0.0.1",
+  "description": "nodejs cli robot.txt parser",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src",
+    "test": "mocha test",
+    "lint:src": "eslint src/",
+    "lint:test": "eslint test/",
+    "lint": "npm run lint:src && npm run lint:test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LopatkinEvgeniy/robot-parser.git"
+  },
+  "keywords": [
+    "nodejs",
+    "robot.txt",
+    "parser"
+  ],
+  "engines": {
+    "node": ">=6.10.1"
+  },
+  "author": "LopatkinEvgeniy",
+  "license": "GNU",
+  "bugs": {
+    "url": "https://github.com/LopatkinEvgeniy/robot-parser/issues"
+  },
+  "homepage": "https://github.com/LopatkinEvgeniy/robot-parser#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^3.18.0",
+    "eslint-config-airbnb-base": "^11.1.1",
+    "eslint-plugin-import": "^2.2.0",
+    "mocha": "^3.2.0"
+  }
+}

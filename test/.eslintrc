@@ -1,0 +1,11 @@
+{
+  "extends": "airbnb-base",
+  "env": {
+    "mocha": true
+  },
+  "rules": {
+    "max-len": [2, {"code": 120, "tabWidth": 2}],
+    "no-unused-expressions": 0,
+    "no-console": 0
+  }
+}

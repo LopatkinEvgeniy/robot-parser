@@ -1,13 +1,12 @@
 const {
   readDomainFromConsole,
+  normalizeDomainName,
   getRobotsFromServer,
   parseRobotsTxt,
 } = require('./utils');
 
-// TODO: Validate domain name
-// TODO: Normalize domain name
-
 readDomainFromConsole()
+  .then(domain => normalizeDomainName(domain))
   .then(domain => getRobotsFromServer(domain))
   .then(robotsData => parseRobotsTxt(robotsData))
   .then((robotsParsedData) => {

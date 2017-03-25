@@ -1,10 +1,11 @@
 const readline = require('readline');
 const http = require('http');
+const https = require('https');
 const { EOL_REGEXP, ROBOTS_LINE_REGEXP } = require('./regexp');
 
 /*
- * Читает имя домена из консоли
- * */
+* Читает имя домена из консоли
+* */
 
 const readDomainFromConsole = () => new Promise((resolve) => {
   const rl = readline.createInterface({
@@ -19,14 +20,35 @@ const readDomainFromConsole = () => new Promise((resolve) => {
 });
 
 /*
- * Производит GET запрос на домен к файлу robots.txt
- * */
+* Приводит имя домена к нормализованному виду
+* */
 
-// TODO: https support
+const normalizeDomainName = (domainName) => {
+  let result = domainName.trim();
+  const hasHttpPrefix = result.substr(0, 7) === 'http://';
+  const hasHttpsPrefix = result.substr(0, 8) === 'https://';
+
+  // Используем протокол http по-умолчанию
+  if (!hasHttpPrefix && !hasHttpsPrefix) {
+    result = `http://${result}`;
+  }
+
+  // Удаление завершающих слешей
+  result = result.replace(/\/+$/, '');
+
+  return result;
+};
+
+/*
+* Производит GET запрос на домен к файлу robots.txt
+* */
+
 const getRobotsFromServer = domain => new Promise((resolve, reject) => {
-  const url = `http://${domain}/robots.txt`;
+  const url = `${domain}/robots.txt`;
+  const isHttps = domain.substr(0, 8) === 'https://';
+  const httpModule = isHttps ? https : http;
 
-  http.get(url, (res) => {
+  httpModule.get(url, (res) => {
     const statusCode = res.statusCode;
 
     if (statusCode !== 200) {
@@ -92,6 +114,7 @@ const parseRobotsTxt = (robotsData) => {
 
 module.exports = {
   readDomainFromConsole,
+  normalizeDomainName,
   getRobotsFromServer,
   parseRobotsTxt,
 };

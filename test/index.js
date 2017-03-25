@@ -1,1 +1,3 @@
-console.log('hello test');
+require('chai').should();
+
+require('./regexp');

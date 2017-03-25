@@ -76,7 +76,6 @@ const getRobotsFromServer = domain => new Promise((resolve, reject) => {
 * Парсит строку, представляющую собой содержимое robots.txt
 * */
 
-// TODO: exclude comments
 const parseRobotsTxt = (robotsData) => {
   const robotsParsedData = {};
   let currentUserAgent = false;

@@ -11,6 +11,6 @@ readDomainFromConsole()
   .then(robotsData => parseRobotsTxt(robotsData))
   .then((robotsParsedData) => {
     // Форматированный вывод результата
-    console.log(JSON.stringify(robotsParsedData, null, 2));
+    console.log(JSON.stringify(robotsParsedData, null, 2)); // eslint-disable-line no-console
   })
-  .catch(error => console.error(error.message));
+  .catch(error => console.error(error.message)); // eslint-disable-line no-console

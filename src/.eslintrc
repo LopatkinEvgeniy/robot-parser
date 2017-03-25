@@ -4,7 +4,6 @@
     "node": true
   },
   "rules": {
-    "max-len": [2, {"code": 100, "tabWidth": 2}],
-    "no-console": 0
+    "max-len": [2, {"code": 100, "tabWidth": 2}]
   }
 }

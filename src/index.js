@@ -2,6 +2,10 @@ const readline = require('readline');
 const http = require('http');
 const co = require('co');
 
+// Универсальный перевод строки (на зависит от платформы)
+const EOL_REGEXP = /\r\n?|\n/;
+const ROBOTS_LINE_REGEXP = /(.+):(?:\s)*([^#\s]+)/;
+
 /*
 * Читает имя домена из консоли
 * */
@@ -22,6 +26,7 @@ const readDomainFromConsole = () => new Promise((resolve) => {
 * Производит GET запрос на домен к файлу robots.txt
 * */
 
+// TODO: https support
 const getRobotsFromServer = domain => new Promise((resolve, reject) => {
   const url = `http://${domain}/robots.txt`;
 
@@ -35,6 +40,8 @@ const getRobotsFromServer = domain => new Promise((resolve, reject) => {
 
     // Читаем тело ответа сервера
     let data = '';
+
+    res.setEncoding('utf8');
     res.on('data', (chunk) => {
       data += chunk;
     });
@@ -47,6 +54,42 @@ const getRobotsFromServer = domain => new Promise((resolve, reject) => {
   });
 });
 
+// TODO: exclude comments
+const parseRobotsTxt = (robotsData) => {
+  const robotsParsedData = {};
+  let currentUserAgent = false;
+
+  robotsData.split(EOL_REGEXP)
+    .map(line => line.trim())
+    .forEach((line) => {
+      const res = ROBOTS_LINE_REGEXP.exec(line);
+
+      if (res === null) {
+        return;
+      }
+
+      const [, key, val] = res;
+
+      if (key === 'User-agent') {
+        currentUserAgent = val;
+
+        // Добавляем новый User-agent
+        if (!robotsParsedData[currentUserAgent]) {
+          robotsParsedData[currentUserAgent] = {
+            Allow: [],
+            Disallow: [],
+          };
+        }
+      } else if (key === 'Allow') {
+        robotsParsedData[currentUserAgent].Allow.push(val);
+      } else if (key === 'Disallow') {
+        robotsParsedData[currentUserAgent].Disallow.push(val);
+      }
+    });
+
+  return robotsParsedData;
+};
+
 co(function* generator() {
   const domain = yield readDomainFromConsole();
 
@@ -54,7 +97,9 @@ co(function* generator() {
   // TODO: Normalize domain name
 
   const robotsData = yield getRobotsFromServer(domain);
+  const robotsParsedData = parseRobotsTxt(robotsData);
 
-  console.log(robotsData);
+  // Форматированный вывод результата
+  console.log(JSON.stringify(robotsParsedData, null, 2));
 }).catch(error => console.error(error.message));
 

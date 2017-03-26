@@ -73,5 +73,15 @@ describe('Module regexp', () => {
       key.should.be.equal('Allow');
       value.should.be.equal('/*/*/blob/master');
     });
+    it('Should correctly parse correct line with comment in the end', () => {
+      const strings = ['User-agent: CCBot # comment', 'User-agent: CCBot# comment', 'User-agent: CCBot#comment'];
+
+      strings.forEach((string) => {
+        const [, key, value] = ROBOTS_LINE_REGEXP.exec(string);
+
+        key.should.be.equal('User-agent');
+        value.should.be.equal('CCBot');
+      });
+    });
   }); // ROBOTS_LINE_REGEXP
 }); // Module regexp

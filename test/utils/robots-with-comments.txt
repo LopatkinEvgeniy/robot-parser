@@ -1,0 +1,8 @@
+# Comment Here
+#and here
+User-agent: Daumoa # comment
+Allow: /*/*/tree/master
+Allow: /*/*/blob/master #comment
+Disallow: /ekansa/Open-Context-Data
+Disallow: /ekansa/opencontext-*
+Disallow: /*/*/pulse

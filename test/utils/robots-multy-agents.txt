@@ -1,0 +1,11 @@
+User-agent: CCBot
+Allow: /*/*/tree/master
+Disallow: /ekansa/Open-Context-Data
+Allow: /*/*/blob/master
+Disallow: /ekansa/opencontext-*
+User-agent: Daumoa
+Allow: /*/*/tree/master
+Allow: /*/*/blob/master
+Disallow: /ekansa/Open-Context-Data
+Disallow: /ekansa/opencontext-*
+Disallow: /*/*/pulse

@@ -1,4 +1,8 @@
-const { normalizeDomainName } = require('../../src/utils');
+const fs = require('fs');
+const {
+  normalizeDomainName,
+  parseRobotsTxt,
+} = require('../../src/utils');
 
 describe('Module utils', () => {
   describe('Function normalizeDomainName', () => {
@@ -27,4 +31,58 @@ describe('Module utils', () => {
       normalizeDomainName('http://test.ru/').should.be.equal('http://test.ru');
     });
   }); // Function normalizeDomainName
+
+  describe('Function parseRobotsTxt', () => {
+    it('Should be a function', () => {
+      parseRobotsTxt.should.be.a.function;
+    });
+    it('Should return empty object when empty string given', () => {
+      parseRobotsTxt('').should.be.deep.equal({});
+    });
+    it('Should return empty object when whitespaces given', () => {
+      parseRobotsTxt(' ').should.be.deep.equal({});
+      parseRobotsTxt('    ').should.be.deep.equal({});
+    });
+    it('Should return empty object when multiline whitespaces given', () => {
+      parseRobotsTxt('\n  \n\n \n').should.be.deep.equal({});
+      parseRobotsTxt('\n\n  \n \n').should.be.deep.equal({});
+    });
+    it('Should correctly parse file without comments', () => {
+      const fileData = fs.readFileSync('test/utils/robots-no-comments.txt')
+        .toString();
+
+      parseRobotsTxt(fileData).should.be.deep.equal({
+        CCBot: {
+          Allow: ['/*/*/tree/master', '/*/*/blob/master'],
+          Disallow: ['/ekansa/Open-Context-Data', '/ekansa/opencontext-*'],
+        },
+      });
+    });
+    it('Should correctly parse file with comments', () => {
+      const fileData = fs.readFileSync('test/utils/robots-with-comments.txt')
+        .toString();
+
+      parseRobotsTxt(fileData).should.be.deep.equal({
+        Daumoa: {
+          Allow: ['/*/*/tree/master', '/*/*/blob/master'],
+          Disallow: ['/ekansa/Open-Context-Data', '/ekansa/opencontext-*', '/*/*/pulse'],
+        },
+      });
+    });
+    it('Should correctly parse file with multiple User-agents', () => {
+      const fileData = fs.readFileSync('test/utils/robots-multy-agents.txt')
+        .toString();
+
+      parseRobotsTxt(fileData).should.be.deep.equal({
+        CCBot: {
+          Allow: ['/*/*/tree/master', '/*/*/blob/master'],
+          Disallow: ['/ekansa/Open-Context-Data', '/ekansa/opencontext-*'],
+        },
+        Daumoa: {
+          Allow: ['/*/*/tree/master', '/*/*/blob/master'],
+          Disallow: ['/ekansa/Open-Context-Data', '/ekansa/opencontext-*', '/*/*/pulse'],
+        },
+      });
+    });
+  }); // Function parseRobotsTxt
 }); // Module utils

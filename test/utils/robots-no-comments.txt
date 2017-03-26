@@ -1,0 +1,5 @@
+User-agent: CCBot
+Allow: /*/*/tree/master
+Disallow: /ekansa/Open-Context-Data
+Allow: /*/*/blob/master
+Disallow: /ekansa/opencontext-*

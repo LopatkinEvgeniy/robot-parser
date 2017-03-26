@@ -27,6 +27,14 @@ Http Парсер файла robots.txt, написанный на nodejs
 }
 ```
 
+Если не указан протокол, то по-умолчанию будет использоваться http. Для использования https его нужно указать явно: 
+
+```bash
+Enter domain to parse robots.txt: ya.ru #http
+Enter domain to parse robots.txt: http://ya.ru #http
+Enter domain to parse robots.txt: https://ya.ru #https
+```
+
 ### Требования:
 * "node": ">=6.10.1"
 
